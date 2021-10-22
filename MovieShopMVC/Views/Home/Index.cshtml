@@ -1,0 +1,17 @@
+﻿@model List<ApplicationCore.Models.MovieCardResponseModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2> @ViewBag.PageTitle </h2>
+<h3> @ViewData["test"] </h3>
+
+<div>
+    @foreach (var movie in Model)
+    {
+        <div>
+            @movie.Title
+            <img src="@movie.PosterUrl" />
+        </div>
+    }
+</div>

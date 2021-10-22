@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
+    <None Remove="Entities\" />
+    <None Remove="Exceptions\" />
+    <None Remove="Models\" />
+    <None Remove="RepositoryInterfaces\" />
+    <None Remove="ServiceInterfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Models\" />
+    <Folder Include="RepositoryInterfaces\" />
+    <Folder Include="ServiceInterfaces\" />
+  </ItemGroup>
+</Project>
