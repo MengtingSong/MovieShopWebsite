@@ -4,9 +4,9 @@ using ApplicationCore.Entities;
 
 namespace ApplicationCore.RepositoryInterfaces
 {
-    public interface IMovieRepository
+    public interface IUserRepository
     {
-        Task<IEnumerable<Movie>> GetTop30RevenueMovies();
-        Task<Movie> GetMovieById(int id);
+        Task<User> GetUserByEmail(string email);
+        Task<User> AddUser(User user);
     }
 }

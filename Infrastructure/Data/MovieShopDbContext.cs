@@ -23,7 +23,7 @@ namespace Infrastructure.Data
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<MovieCast> MovieCasts { get; set; }
         public DbSet<MovieCrew> MovieCrews { get; set; }
-        
+
         public MovieShopDbContext(DbContextOptions<MovieShopDbContext> options) : base(options)
         {
         }
@@ -197,6 +197,7 @@ namespace Infrastructure.Data
             builder.Property(m => m.ReleaseDate).HasColumnType("datetime2(7)").HasDefaultValueSql("getdate()");
             builder.Property(m => m.CreatedDate).HasColumnType("datetime2(7)").HasDefaultValueSql("getdate()");
             builder.Property(m => m.UpdatedDate).HasColumnType("datetime2(7)").HasDefaultValueSql("getdate()");
+            builder.Ignore(m => m.Rating);
         }
     }
 }

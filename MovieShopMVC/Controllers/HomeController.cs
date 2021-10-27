@@ -21,9 +21,9 @@ namespace MovieShopMVC.Controllers
         // Routing
         // https://localhost/home/index
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var movieCards = _movieService.GetTop30RevenueMovies();
+            var movieCards = await _movieService.GetTop30RevenueMovies();
             // ViewBag.PageTitle = "Top Revenue Movies";
             // ViewData["test"] = "Test Data is Passed using ViewData";
             return View(movieCards);
@@ -35,13 +35,7 @@ namespace MovieShopMVC.Controllers
         {
             return View();
         }
-
-        // https://localhost/home/topmovies
-        [HttpGet]
-        public IActionResult TopMovies()
-        {
-            return View();
-        }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

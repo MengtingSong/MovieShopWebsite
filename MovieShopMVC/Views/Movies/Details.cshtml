@@ -1,0 +1,88 @@
+@using System.Globalization
+@model ApplicationCore.Models.MovieDetailsResponseModel
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+<div class="container-fluid bg-dark">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-2 d-flex flex-row align-items-center">
+      <img src="@Model.PosterUrl" class="card-img" alt="movie poster">
+    </div>
+    <div class="col-md-6 card text-white p-0 m-0">
+      <img src="@Model.BackdropUrl" class="card-img" alt="background image">
+      <div class="card-img-overlay">
+        <h4 class="card-title">@Model.Title</h4>
+        <p class="card-text"><small class="text-muted">@Model.Tagline</small></p>
+        <p font-size="0.1em" class="card-text font-weight-bold d-inline mr-3">@Model.RunTime.ToString() m| @Model.ReleaseDate.Year.ToString()</p>
+        @foreach (var genre in Model.Genres)
+        {
+          <span class="badge badge-pill badge-info m-2 text-center">
+            <small>@genre.Name</small>
+          </span>  
+        }
+        <br>
+        <span class="badge badge-success font-weight-bold">@Model.Rating.ToString("0.0")</span>
+        <p ont-size="0.1em" class="card-text">@Model.Overview</p>
+      </div>
+    </div>
+    <div class="col-md-2 d-flex flex-column justify-content-center align-items-end">
+      <a href="#" class="btn btn-sm p-0 btn-dark border-white">
+        <span class="glyphicon glyphicon-edit white" aria-hidden="true"></span>REVIEW
+      </a>
+      <br>
+      <a href="#" class="btn btn-sm p-0 btn-light">WATCH MOVIE</a>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid d-flex flex-row">
+  <div class="col-md-4 d-flex flex-column">
+    <div class="card">
+        <div class="card-header">
+          MOVIE FACTS
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><small>Release Date</small>
+            <div class="badge badge-pill badge-dark">@Model.ReleaseDate.ToString("MMMM dd, yyyy")</div></li>
+          <li class="list-group-item"><small>Run Time</small>
+            <div class="badge badge-pill badge-dark">@Model.RunTime.ToString() m</div></li>
+          <li class="list-group-item"><small>Box Office</small>
+            <div class="badge badge-pill badge-dark">$@Model.Revenue.Value.ToString("C", CultureInfo.CurrentCulture)</div></li>          
+          <li class="list-group-item"><small>Budget</small>
+            <div class="badge badge-pill badge-dark">$@Model.Budget.Value.ToString("C", CultureInfo.CurrentCulture)</div></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          TRAILERS
+        </div>
+        <ul class="list-group list-group-flush">
+          @foreach (var trailer in Model.Trailers)
+          {
+            <li class="list-group-item">
+              <a href="@trailer.TrailerUrl">@trailer.Name</a>
+            </li>
+          }
+        </ul>
+      </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        CAST
+      </div>
+      <ul class="list-group list-group-flush">
+        @foreach (var cast in @Model.Casts)
+        {
+          <li class="list-group-item">
+            <img class="d-inline px-3" src="@cast.ProfilePath">
+            <p class="d-inline px-3">@cast.Name</p>
+            <p class="d-inline px-3">@cast.Character</p>
+          </li>
+        }
+      </ul>
+  </div>
+  </div>
+</div>
