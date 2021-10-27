@@ -27,7 +27,7 @@ namespace MovieShopMVC.Controllers
             // receive the model from view
             await _userService.RegisterUser(requestModel);
             // return to login page
-            return View();
+            return View("Login");
         }
 
         [HttpGet]
@@ -44,7 +44,7 @@ namespace MovieShopMVC.Controllers
             {
                 // username/password is wrong
                 // show message to user saying email/password is wrong
-                return View();
+                return View("Register");
             }
             return LocalRedirect("~/");
         }
