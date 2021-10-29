@@ -34,7 +34,5 @@ namespace Infrastructure.Repositories
             if (movieRating > 0) movie.Rating = movieRating;
             return movie;
         }
-        
-        
     }
 }

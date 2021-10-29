@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Models;
@@ -95,6 +96,31 @@ public class UserService : IUserService
                 return userLoginResponseModel;
             }
 
+            return null;
+        }
+
+        public async Task<List<MovieCardResponseModel>> Purchases(int id)
+        {
+            var purchases = await _userRepository.GetPurchases(id);
+            var movieCards = new List<MovieCardResponseModel>();
+
+            foreach (var purchase in purchases)
+            {
+                movieCards.Add(new MovieCardResponseModel
+                {
+                    Id = purchase.MovieId, Title = purchase.Movie.Title, PosterUrl = purchase.Movie.PosterUrl
+                });
+            }
+            return movieCards;
+        }
+        
+        public async Task<MovieCardResponseModel> Favorites(int id)
+        {
+            return null;
+        }
+        
+        public async Task<ReviewResponseModel> Reviews(int id)
+        {
             return null;
         }
     }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Models;
@@ -28,6 +30,13 @@ namespace Infrastructure.Repositories
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             return user;
+        }
+
+        public async Task<IEnumerable<Purchase>> GetPurchases(int id)
+        {
+            var movies = await _dbContext.Purchases.Where(p => p.UserId == id)
+                .Include(p => p.Movie).ToListAsync();
+            return movies;
         }
     }
 }

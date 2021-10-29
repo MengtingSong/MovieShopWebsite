@@ -8,5 +8,6 @@ namespace ApplicationCore.RepositoryInterfaces
     {
         Task<User> GetUserByEmail(string email);
         Task<User> AddUser(User user);
+        Task<IEnumerable<Purchase>> GetPurchases(int id);
     }
 }
