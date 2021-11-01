@@ -10,31 +10,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : EfRepository<User>, IUserRepository
     {
-        private readonly MovieShopDbContext _dbContext;
-
-        public UserRepository(MovieShopDbContext dbContext)
+        public UserRepository(MovieShopDbContext dbContext): base(dbContext)
         {
-            _dbContext = dbContext;
         }
-        
-        public Task<User> GetUserByEmail(string email)
+
+        public async Task<User> GetUserByEmail(string email)
         {
-            var user = _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            
             return user;
         }
 
-        public async Task<User> AddUser(User user)
+        public async Task<IEnumerable<Review>> GetReviewsByUser(int userId)
         {
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
-            return user;
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Purchase>> GetPurchases(int id)
         {
-            var movies = await _dbContext.Purchases.Where(p => p.UserId == id)
+           var movies = await _dbContext.Purchases.Where(p => p.UserId == id)
                 .Include(p => p.Movie).ToListAsync();
             return movies;
         }

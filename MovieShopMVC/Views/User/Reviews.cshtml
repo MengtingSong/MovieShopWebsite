@@ -1,0 +1,41 @@
+@model ApplicationCore.Models.ReviewResponseModel
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<h1>Reviews</h1>
+<div class="rounded">
+    <div class="container-fluid">
+        <div class="row">
+            <table>
+                    <tbody class="border-0">
+                        @foreach (var review in Model.Reviews)
+                        {
+                            <tr class="border-bottom">
+                                <td rowspan="2">
+                                    <img src="@review.PosterUrl" alt="Movie Poster" class="img-fluid rounded-circle">
+                                </td>
+                                <td>
+                                    <b>@review.Title</b>
+                                </td>
+                                <td>
+                                    <badge class="badge badge-success badge-pill">@review.Rating</badge>
+                                </td>
+                                <td colspan="2">
+                                    <p>@review.ReviewText</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-controller="Home" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -30,9 +30,9 @@ namespace Infrastructure.Services
             return movieCards;
         }
 
-        public async Task<MovieDetailsResponseModel> GetMovieById(int id)
+        public async Task<MovieDetailsResponseModel> GetMovieDetails(int id)
         {
-            var movie = await _movieRepository.GetMovieById(id);
+            var movie = await _movieRepository.GetById(id);
             if (movie == null)
             {
                 throw new Exception($"No movie found for this {id}");
@@ -75,6 +75,12 @@ namespace Infrastructure.Services
             }
 
             return movieDetails;
+        }
+
+        public async Task<IEnumerable<string>> GetGenres()
+        {
+            var genres = await _movieRepository.GetGenres();
+            return genres;
         }
     }
 }

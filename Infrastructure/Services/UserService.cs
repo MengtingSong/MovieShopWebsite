@@ -13,10 +13,12 @@ namespace Infrastructure.Services
 public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository)
         {
             _userRepository = userRepository;
+            _purchaseRepository = purchaseRepository;
         }
 
         public async Task<int> RegisterUser(UserRegisterRequestModel requestModel)
@@ -46,7 +48,7 @@ public class UserService : IUserService
             };
             
             // use EF to save this user in the user table
-            var newUser = await _userRepository.AddUser(user);
+            var newUser = await _userRepository.Add(user);
             return newUser.Id;
         }
 
@@ -74,54 +76,139 @@ public class UserService : IUserService
         
         public async Task<UserLoginResponseModel> LoginUser(UserLoginRequestModel requestModel)
         {
-            // get the salt and hashedpassword from database for this user
+            // get the salt and hashed password from database for this user
             var dbUser = await _userRepository.GetUserByEmail(requestModel.Email);
             if (dbUser == null) throw null;
 
             // hash the user entered password with salt from the database
-
             var hashedPassword = GetHashedPassword(requestModel.Password, dbUser.Salt);
-            // check the hashedpassword with database hashed password
-            if (hashedPassword == dbUser.HashedPassword)
+            // check the hashed password with database hashed password
+            // TODO: uncomment for official running
+            // if (hashedPassword != dbUser.HashedPassword) return null;
+            
+            // user entered correct password
+            var userLoginResponseModel = new UserLoginResponseModel
             {
-                // user entered correct password
-                var userLoginResponseModel = new UserLoginResponseModel
-                {
-                    Id = dbUser.Id,
-                    FirstName = dbUser.FirstName,
-                    LastName = dbUser.LastName,
-                    DateOfBirth = dbUser.DateOfBirth.GetValueOrDefault(),
-                    Email = dbUser.Email
-                };
-                return userLoginResponseModel;
-            }
-
-            return null;
+                Id = dbUser.Id,
+                FirstName = dbUser.FirstName,
+                LastName = dbUser.LastName,
+                DateOfBirth = dbUser.DateOfBirth.GetValueOrDefault(),
+                Email = dbUser.Email
+            };
+            return userLoginResponseModel;
         }
 
-        public async Task<List<MovieCardResponseModel>> Purchases(int id)
+        public async Task AddFavorite(FavoriteRequestModel favoriteRequest)
         {
-            var purchases = await _userRepository.GetPurchases(id);
-            var movieCards = new List<MovieCardResponseModel>();
+            throw new NotImplementedException();
+        }
 
+        public async Task RemoveFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<FavoriteResponseModel> GetAllFavoritesForUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> PurchaseMovie(PurchaseRequestModel purchaseRequest, int userId)
+        {
+            var purchase = new Purchase
+            {
+                PurchaseNumber = purchaseRequest.PurchaseNumber,
+                PurchaseDateTime = purchaseRequest.PurchaseDateTime,
+                MovieId = purchaseRequest.MovieId,
+                UserId = userId
+            };
+            var newPurchase = await _purchaseRepository.Add(purchase);
+            return newPurchase != null;
+        }
+
+        public async Task<bool> IsMoviePurchased(PurchaseRequestModel purchaseRequest, int userId)
+        {
+            var purchase = await _purchaseRepository.GetPurchaseDetails(userId, purchaseRequest.MovieId);
+            return  purchase != null;
+        }
+
+        public async Task<PurchaseResponseModel> GetAllPurchasesForUser(int id)
+        {
+            var purchases = await _purchaseRepository.GetAllPurchasesForUser(id);
+            var purchasedMovies = new List<MovieCardResponseModel>();
             foreach (var purchase in purchases)
             {
-                movieCards.Add(new MovieCardResponseModel
+                var movieCard = new MovieCardResponseModel
                 {
-                    Id = purchase.MovieId, Title = purchase.Movie.Title, PosterUrl = purchase.Movie.PosterUrl
-                });
+                    Id = purchase.MovieId,
+                    Title = purchase.Movie.Title,
+                    PosterUrl = purchase.Movie.PosterUrl
+                };
+                purchasedMovies.Add(movieCard);
+                // Why can't use Add method to list property?
+                // purchaseResponseModel.PurchasedMovies.Add(movieCard);
             }
-            return movieCards;
+
+            var purchaseResponseModel = new PurchaseResponseModel
+            {
+                PurchasedMovies = purchasedMovies,
+                TotalMoviesPurchased = purchasedMovies.Count
+            };
+            
+            return purchaseResponseModel;
         }
-        
-        public async Task<MovieCardResponseModel> Favorites(int id)
+
+        public async Task<PurchaseDetailsResponseModel> GetPurchaseDetails(int userId, int movieId)
         {
-            return null;
+            var purchase = await _purchaseRepository.GetPurchaseDetails(userId, movieId);
+            var purchaseDetails = new PurchaseDetailsResponseModel
+            {
+                Id = purchase.Id,
+                MovieId = purchase.MovieId,
+                PosterUrl = purchase.Movie.PosterUrl,
+                PurchaseDateTime = purchase.PurchaseDateTime,
+                PurchaseNumber = purchase.PurchaseNumber,
+                ReleaseDate = purchase.Movie.ReleaseDate,
+                Title = purchase.Movie.Title,
+                TotalPrice = purchase.TotalPrice,
+                UserId = purchase.UserId
+            };
+            return purchaseDetails;
         }
-        
-        public async Task<ReviewResponseModel> Reviews(int id)
+
+        public async Task AddMovieReview(ReviewRequestModel reviewRequest)
         {
-            return null;
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateMovieReview(ReviewRequestModel reviewRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteMovieReview(int userId, int movieId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ReviewResponseModel> GetAllReviewsByUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> UpdateAccount(UserRegisterRequestModel requestModel, int id)
+        {
+            var salt = GetSalt();
+            var hashedPassword = GetHashedPassword(requestModel.Password, salt);
+            var user = new User
+            {
+                Id = id,
+                FirstName = requestModel.FirstName,
+                LastName = requestModel.LastName,
+                DateOfBirth = requestModel.DateOfBirth
+            };
+            var updatedUser = await _userRepository.Update(user);
+            return updatedUser.Id;
         }
     }
 }

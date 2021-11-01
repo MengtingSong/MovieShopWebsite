@@ -4,10 +4,9 @@ using ApplicationCore.Entities;
 
 namespace ApplicationCore.RepositoryInterfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IAsyncRepository<User>
     {
         Task<User> GetUserByEmail(string email);
-        Task<User> AddUser(User user);
-        Task<IEnumerable<Purchase>> GetPurchases(int id);
+        Task<IEnumerable<Review>> GetReviewsByUser(int userId);
     }
 }

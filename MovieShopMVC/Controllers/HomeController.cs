@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.Models;
 using ApplicationCore.ServiceInterfaces;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +25,10 @@ namespace MovieShopMVC.Controllers
         public async Task<IActionResult> Index()
         {
             var movieCards = await _movieService.GetTop30RevenueMovies();
+            // TODO: pass global variable of Genres to _Layout.cshtml ???
+            var genres = await _movieService.GetGenres();
+            ViewData["Genres"] = genres;
             // ViewBag.PageTitle = "Top Revenue Movies";
-            // ViewData["test"] = "Test Data is Passed using ViewData";
             return View(movieCards);
         }
 
