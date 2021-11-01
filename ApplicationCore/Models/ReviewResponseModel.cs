@@ -4,6 +4,10 @@ namespace ApplicationCore.Models
 {
     public class ReviewResponseModel
     {
+        public ReviewResponseModel()
+        {
+            Reviews = new List<MovieReviewResponseModel>();
+        }
         public int TotalReviewsCount { get; set; }
         public List<MovieReviewResponseModel> Reviews { get; set; }
     }

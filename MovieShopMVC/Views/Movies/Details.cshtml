@@ -18,7 +18,7 @@
                 <p class="card-text mb-0">
                     <small class="text-muted">@Model.Tagline</small>
                 </p>
-                <p class="card-text font-weight-bold d-inline mr-3">@Model.RunTime.ToString() m| @Model.ReleaseDate.Year.ToString()</p>
+                <p class="card-text font-weight-bold d-inline mr-3">@Model.RunTime.ToString() m | @Model.ReleaseDate.Year.ToString()</p>
                 @foreach (var genre in Model.Genres)
                 {
                     <span class="badge badge-pill badge-secondary m-2 text-center">
@@ -32,17 +32,21 @@
         </div>
         <div class="col-md-2 d-flex align-items-center justify-content-end">
             <div class="btn btn-group-vertical p-2">
-            <a href="#" class="btn btn-sm btn-dark border-white py-0 w-100 mb-3">
-                <span class="glyphicon glyphicon-edit white" aria-hidden="true"></span>
-                <small>REVIEW</small>
-            </a>
-                <a href="#" class="btn btn-sm btn-light py-0 w-100 mb-3">
-                <small>PURCHASE MOVIE</small>
-            </a>
                 <a href="#" class="btn btn-sm btn-dark border-white py-0 w-100 mb-3">
-                <small>WATCH MOVIE</small>
-            </a>
+                    <span class="glyphicon glyphicon-edit white" aria-hidden="true"></span>
+                    <small>MOVIE REVIEWS</small>
+                </a>
+                <a asp-controller="User" asp-action="Purchase" asp-route-movieId="@Model.Id" class="btn btn-sm btn-light py-0 w-100 mb-3">
+                    <small>PURCHASE MOVIE</small>
+                </a>
+                <a href="@Model.ImdbUrl" class="btn btn-sm btn-dark border-white py-0 w-100 mb-3">
+                    <small>WATCH MOVIE</small>
+                </a>
+                <a asp-controller="User" asp-action="Favorite" asp-route-movieId="@Model.Id" class="btn btn-sm btn-light py-0 w-100 mb-3">
+                    <small>FAVORITES</small>
+                </a>
             </div>
+
         </div>
     </div>
 </div>
@@ -95,15 +99,15 @@
             <table>
                 <tbody class="border-bottom-0 p-2">
                 @foreach (var cast in @Model.Casts)
-                    {
-                        <tr class="border-bottom">
-                            <td class="col-3 text-center">
-                                <img class="img-fluid d-inline rounded-circle m-3 profile-image" src="@cast.ProfilePath" alt="profile image">
-                            </td>
-                            <td class="col-4">@cast.Name</td>
-                            <td class="col-4">@cast.Character</td>
-                        </tr>
-                    }
+                {
+                    <tr class="border-bottom">
+                        <td class="col-3 text-center">
+                            <img class="img-fluid d-inline rounded-circle m-3 profile-image" src="@cast.ProfilePath" alt="profile image">
+                        </td>
+                        <td class="col-4">@cast.Name</td>
+                        <td class="col-4">@cast.Character</td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>

@@ -8,6 +8,7 @@ namespace ApplicationCore.ServiceInterfaces
     {
         Task<int> RegisterUser(UserRegisterRequestModel requestModel);
         Task<UserLoginResponseModel> LoginUser(UserLoginRequestModel requestModel);
+        Task<int> UpdateUser(UserRegisterRequestModel requestModel, int userId);
         Task AddFavorite(FavoriteRequestModel favoriteRequest);
         Task RemoveFavorite(FavoriteRequestModel favoriteRequest);
         Task<FavoriteResponseModel> GetAllFavoritesForUser(int id);
@@ -19,6 +20,5 @@ namespace ApplicationCore.ServiceInterfaces
         Task UpdateMovieReview(ReviewRequestModel reviewRequest);
         Task DeleteMovieReview(int userId, int movieId);
         Task<ReviewResponseModel> GetAllReviewsByUser(int id);
-        Task<int> UpdateAccount(UserRegisterRequestModel requestModel, int userId);
     }
 }

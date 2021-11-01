@@ -21,11 +21,11 @@ namespace Infrastructure.Repositories
             return movies;
         }
 
-        public async Task<IEnumerable<Review>> GetMovieReviews(int id, int pageSize = 30, int page = 1)
+        public async Task<IEnumerable<Review>> GetAllReviewsForMovie(int id, int pageSize = 30, int page = 1)
         {
             throw new NotImplementedException();
         }
-        
+
         public new async Task<Movie> GetById(int id)
         {
             var movie = await _dbContext.Movies

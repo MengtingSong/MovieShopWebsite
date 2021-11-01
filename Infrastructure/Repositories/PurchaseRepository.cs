@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
         {
         }
         
-        // TODO: use pageSize and pageIndex
+        // TODO: how to use pageSize and pageIndex?
         public async Task<IEnumerable<Purchase>> GetAllPurchases(int pageSize = 30, int pageIndex = 1)
         {
             var purchases = await _dbContext.Purchases.Take(pageSize * 60).ToListAsync();

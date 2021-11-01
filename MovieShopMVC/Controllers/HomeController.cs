@@ -26,8 +26,8 @@ namespace MovieShopMVC.Controllers
         {
             var movieCards = await _movieService.GetTop30RevenueMovies();
             // TODO: pass global variable of Genres to _Layout.cshtml ???
-            var genres = await _movieService.GetGenres();
-            ViewData["Genres"] = genres;
+            // var genres = await _movieService.GetGenres();
+            // ViewData["Genres"] = genres;
             // ViewBag.PageTitle = "Top Revenue Movies";
             return View(movieCards);
         }

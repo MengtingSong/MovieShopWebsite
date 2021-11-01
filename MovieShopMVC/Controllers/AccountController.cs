@@ -103,7 +103,7 @@ namespace MovieShopMVC.Controllers
         [Authorize]
         public async Task<IActionResult> Account(UserRegisterRequestModel requestModel)
         {
-            await _userService.UpdateAccount(requestModel, _currentUserService.UserId);
+            await _userService.UpdateUser(requestModel, _currentUserService.UserId);
             // TODO: update cookies without logging out and rerender view
             return LocalRedirect("~/");
         }

@@ -14,11 +14,16 @@ public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
+        private readonly IReviewRepository _reviewRepository;
 
-        public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository)
+        public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository, 
+            IFavoriteRepository favoriteRepository, IReviewRepository reviewRepository)
         {
             _userRepository = userRepository;
             _purchaseRepository = purchaseRepository;
+            _favoriteRepository = favoriteRepository;
+            _reviewRepository = reviewRepository;
         }
 
         public async Task<int> RegisterUser(UserRegisterRequestModel requestModel)
@@ -97,20 +102,59 @@ public class UserService : IUserService
             };
             return userLoginResponseModel;
         }
-
+        
+        public async Task<int> UpdateUser(UserRegisterRequestModel requestModel, int id)
+        {
+            var salt = GetSalt();
+            var hashedPassword = GetHashedPassword(requestModel.Password, salt);
+            var user = new User
+            {
+                Id = id,
+                FirstName = requestModel.FirstName,
+                LastName = requestModel.LastName,
+                DateOfBirth = requestModel.DateOfBirth
+            };
+            var updatedUser = await _userRepository.Update(user);
+            return updatedUser.Id;
+        }
+        
         public async Task AddFavorite(FavoriteRequestModel favoriteRequest)
         {
-            throw new NotImplementedException();
+            var favorite = new Favorite
+            {
+                UserId = favoriteRequest.UserId,
+                MovieId = favoriteRequest.MovieId
+            };
+            await _favoriteRepository.Add(favorite);
         }
 
         public async Task RemoveFavorite(FavoriteRequestModel favoriteRequest)
         {
-            throw new NotImplementedException();
+            var favorite = new Favorite
+            {
+                UserId = favoriteRequest.UserId,
+                MovieId = favoriteRequest.MovieId
+            };
+            await _favoriteRepository.Delete(favorite);
         }
 
         public async Task<FavoriteResponseModel> GetAllFavoritesForUser(int id)
         {
-            throw new NotImplementedException();
+            var favorites = await _favoriteRepository.GetAllFavoritesForUser(id);
+            var favoriteResponseModel = new FavoriteResponseModel();
+            foreach (var favorite in favorites)
+            {
+                var movieCard = new FavoriteResponseModel.FavoriteMovieResponseModel
+                {
+                    Id = favorite.MovieId,
+                    PosterUrl = favorite.Movie.PosterUrl,
+                    Title = favorite.Movie.Title
+                };
+                favoriteResponseModel.FavoriteMovies.Add(movieCard);
+                favoriteResponseModel.TotalMoviesFavored++;
+            }
+
+            return favoriteResponseModel;
         }
 
         public async Task<bool> PurchaseMovie(PurchaseRequestModel purchaseRequest, int userId)
@@ -135,7 +179,7 @@ public class UserService : IUserService
         public async Task<PurchaseResponseModel> GetAllPurchasesForUser(int id)
         {
             var purchases = await _purchaseRepository.GetAllPurchasesForUser(id);
-            var purchasedMovies = new List<MovieCardResponseModel>();
+            var purchaseResponseModel = new PurchaseResponseModel();
             foreach (var purchase in purchases)
             {
                 var movieCard = new MovieCardResponseModel
@@ -144,20 +188,13 @@ public class UserService : IUserService
                     Title = purchase.Movie.Title,
                     PosterUrl = purchase.Movie.PosterUrl
                 };
-                purchasedMovies.Add(movieCard);
-                // Why can't use Add method to list property?
-                // purchaseResponseModel.PurchasedMovies.Add(movieCard);
+                purchaseResponseModel.PurchasedMovies.Add(movieCard);
+                purchaseResponseModel.TotalMoviesPurchased++;
             }
-
-            var purchaseResponseModel = new PurchaseResponseModel
-            {
-                PurchasedMovies = purchasedMovies,
-                TotalMoviesPurchased = purchasedMovies.Count
-            };
             
             return purchaseResponseModel;
         }
-
+        
         public async Task<PurchaseDetailsResponseModel> GetPurchaseDetails(int userId, int movieId)
         {
             var purchase = await _purchaseRepository.GetPurchaseDetails(userId, movieId);
@@ -196,19 +233,5 @@ public class UserService : IUserService
             throw new NotImplementedException();
         }
 
-        public async Task<int> UpdateAccount(UserRegisterRequestModel requestModel, int id)
-        {
-            var salt = GetSalt();
-            var hashedPassword = GetHashedPassword(requestModel.Password, salt);
-            var user = new User
-            {
-                Id = id,
-                FirstName = requestModel.FirstName,
-                LastName = requestModel.LastName,
-                DateOfBirth = requestModel.DateOfBirth
-            };
-            var updatedUser = await _userRepository.Update(user);
-            return updatedUser.Id;
-        }
     }
 }

@@ -19,7 +19,6 @@ namespace Infrastructure.Repositories
         public async Task<User> GetUserByEmail(string email)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-            
             return user;
         }
 
@@ -28,11 +27,14 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Purchase>> GetPurchases(int id)
+        public async Task<Favorite> AddFavorite(Favorite favorite)
         {
-           var movies = await _dbContext.Purchases.Where(p => p.UserId == id)
-                .Include(p => p.Movie).ToListAsync();
-            return movies;
+            throw new NotImplementedException();
+        }
+
+        public async Task<Favorite> RemoveFavorite(Favorite favorite)
+        {
+            throw new NotImplementedException();
         }
     }
 }
