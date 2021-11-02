@@ -23,6 +23,7 @@ namespace MovieShopMVC.Controllers
             // userId = _currentUserService.UserId;
         }
 
+        // TODO: Add purchase get method - details page
         [HttpGet]
         [Authorize]
         public IActionResult Purchase()
@@ -42,8 +43,8 @@ namespace MovieShopMVC.Controllers
             var isPurchased = await _userService.IsMoviePurchased(requestModel, userId);
             // TODO: show messages telling user movie already purchased
             if (isPurchased) return View("../Views/Movies/Details");
-            var successPurchase = await _userService.PurchaseMovie(requestModel, userId);
-            if (successPurchase)
+            var isSuccessPurchase = await _userService.PurchaseMovie(requestModel, userId);
+            if (isSuccessPurchase)
             {
                 // TODO: show messages telling user whether the movie successfully purchased
                 return RedirectToAction("Purchases");
@@ -52,27 +53,7 @@ namespace MovieShopMVC.Controllers
             // TODO: show error message of purchase failure
             return View("../Views/Movies/Details");
         }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Favorite(int movieId)
-        {
-            var favoriteRequestModel = new FavoriteRequestModel
-            {
-                UserId = _currentUserService.UserId,
-                MovieId = movieId
-            };
-            await _userService.AddFavorite(favoriteRequestModel);
-            return RedirectToAction("Favorites");
-        }
         
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Review(int movieId)
-        {
-            return View();
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Purchases()
@@ -96,7 +77,21 @@ namespace MovieShopMVC.Controllers
             var purchases = await _userService.GetAllPurchasesForUser(userId);
             return View(purchases.PurchasedMovies);
         }
-
+        
+        // TODO: Add/Remove favorite frontend - movie details page && favorite list page
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Favorite(int movieId)
+        {
+            var favoriteRequestModel = new FavoriteRequestModel
+            {
+                UserId = _currentUserService.UserId,
+                MovieId = movieId
+            };
+            await _userService.AddFavorite(favoriteRequestModel);
+            return RedirectToAction("Favorites");
+        }
+        
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Favorites()
@@ -106,6 +101,24 @@ namespace MovieShopMVC.Controllers
             return View(favorites);
         }
 
+        // TODO: Add/Edit/Delete review frontend - movie details page && review list page
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Review()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Review(ReviewRequestModel requestModel)
+        {
+            requestModel.UserId = _currentUserService.UserId;
+            await _userService.AddMovieReview(requestModel);
+            return RedirectToAction("Reviews");
+        }
+
+        // TODO: List of reviews for user page
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Reviews()

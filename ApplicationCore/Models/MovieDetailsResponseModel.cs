@@ -10,7 +10,7 @@ namespace ApplicationCore.Models
             Casts = new List<CastResponseModel>();
             Genres = new List<GenreResponseModel>();
             Trailers = new List<TrailerResponseModel>();
-            Reviews = new List<ReviewDetailsResponseModel>();
+            Reviews = new List<MovieReviewResponseModel>();
         }
 
         public int Id { get; set; }
@@ -31,7 +31,7 @@ namespace ApplicationCore.Models
         public List<CastResponseModel> Casts { get; set; }
         public List<GenreResponseModel> Genres { get; set; }
         public List<TrailerResponseModel> Trailers { get; set; }
-        public List<ReviewDetailsResponseModel> Reviews { get; set; }
+        public List<MovieReviewResponseModel> Reviews { get; set; }
     }
     
     
@@ -50,6 +50,15 @@ namespace ApplicationCore.Models
         public string Name { get; set; }
     }
 
+    public class MovieReviewResponseModel
+    {
+        public int UserId { get; set; }
+        public string ReviewText { get; set; }
+        public decimal Rating { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
+    
     public class TrailerResponseModel
     {
         public int Id { get; set; }

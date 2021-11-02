@@ -1,12 +1,11 @@
 @using System.Globalization
-@NumberFormatInfo.CurrentInfo.CurrencySymbol
 @model ApplicationCore.Models.MovieDetailsResponseModel
 @{
     ViewData["Title"] = "Movie Details";
 }
 
 <div class="container-fluid bg-dark p-0">
-    <div class="row ">
+    <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-2 d-flex flex-row align-items-center px-2">
             <img src="@Model.PosterUrl" class="card-img" alt="movie poster">
@@ -51,7 +50,7 @@
     </div>
 </div>
 
-<div class="container-fluid d-flex flex-row py-3">
+<div class="container-fluid d-flex flex-row py-3 px-0">
     <div class="col-md-4 d-flex flex-column p-0">
         <div class="card mb-4 border-0">
             <div class="card-header">
@@ -68,11 +67,11 @@
                 </li>
                 <li class="list-group-item">
                     <small>Box Office</small>
-                    <div class="badge badge-pill badge-dark">$@Model.Revenue?.ToString("C0"))</div>
+                    <div class="badge badge-pill badge-dark">$@Model.Revenue.GetValueOrDefault().ToString("N", CultureInfo.InvariantCulture)</div>
                 </li>
                 <li class="list-group-item">
                     <small>Budget</small>
-                    <div class="badge badge-pill badge-dark">$@Model.Budget?.ToString("C0")</div>
+                    <div class="badge badge-pill badge-dark">$@Model.Budget.GetValueOrDefault().ToString("N", CultureInfo.InvariantCulture)</div>
                 </li>
             </ul>
         </div>

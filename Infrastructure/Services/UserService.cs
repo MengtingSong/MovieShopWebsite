@@ -215,22 +215,56 @@ public class UserService : IUserService
 
         public async Task AddMovieReview(ReviewRequestModel reviewRequest)
         {
-            throw new NotImplementedException();
+            var review = new Review
+            {
+                UserId = reviewRequest.UserId,
+                MovieId = reviewRequest.MovieId,
+                Rating = reviewRequest.Rating,
+                ReviewText = reviewRequest.ReviewText
+            };
+            await _reviewRepository.Add(review);
         }
 
         public async Task UpdateMovieReview(ReviewRequestModel reviewRequest)
         {
-            throw new NotImplementedException();
+            var review = new Review
+            {
+                UserId = reviewRequest.UserId,
+                MovieId = reviewRequest.MovieId,
+                Rating = reviewRequest.Rating,
+                ReviewText = reviewRequest.ReviewText
+            };
+            await _reviewRepository.Update(review);
         }
 
         public async Task DeleteMovieReview(int userId, int movieId)
         {
-            throw new NotImplementedException();
+            var review = new Review
+            {
+                UserId = userId,
+                MovieId = movieId
+            };
+            await _reviewRepository.Delete(review);
         }
 
         public async Task<ReviewResponseModel> GetAllReviewsByUser(int id)
         {
-            throw new NotImplementedException();
+            var reviews = await _reviewRepository.GetAllReviewsForUser(id);
+            var reviewResponseModel = new ReviewResponseModel();
+            foreach (var review in reviews)
+            {
+                var userReviewResponseModel = new UserReviewResponseModel
+                {
+                    Rating = review.Rating,
+                    ReviewText = review.ReviewText,
+                    Id = review.MovieId,
+                    PosterUrl = review.Movie.PosterUrl,
+                    Title = review.Movie.Title
+                };
+                reviewResponseModel.Reviews.Add(userReviewResponseModel);
+                reviewResponseModel.TotalReviewsCount++;
+            }
+            return reviewResponseModel;
         }
 
     }

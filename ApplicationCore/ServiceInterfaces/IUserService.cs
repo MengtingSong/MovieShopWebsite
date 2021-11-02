@@ -9,6 +9,8 @@ namespace ApplicationCore.ServiceInterfaces
         Task<int> RegisterUser(UserRegisterRequestModel requestModel);
         Task<UserLoginResponseModel> LoginUser(UserLoginRequestModel requestModel);
         Task<int> UpdateUser(UserRegisterRequestModel requestModel, int userId);
+        // TODO: change email
+        // TODO: change password
         Task AddFavorite(FavoriteRequestModel favoriteRequest);
         Task RemoveFavorite(FavoriteRequestModel favoriteRequest);
         Task<FavoriteResponseModel> GetAllFavoritesForUser(int id);

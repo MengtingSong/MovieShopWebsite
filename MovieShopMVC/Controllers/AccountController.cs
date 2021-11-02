@@ -92,13 +92,13 @@ namespace MovieShopMVC.Controllers
             return RedirectToAction("Login");
         }
 
+        // TODO: edit basic profile info
         [HttpGet]
         [Authorize]
         public IActionResult Account()
         {
             return View();
         }
-        
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Account(UserRegisterRequestModel requestModel)
@@ -108,7 +108,7 @@ namespace MovieShopMVC.Controllers
             return LocalRedirect("~/");
         }
 
-        // TODO: Update User email/password
+        // TODO: change email
         // need to call logout and redirect to login page (send new http request)
         [HttpGet]
         [Authorize]
@@ -116,7 +116,6 @@ namespace MovieShopMVC.Controllers
         {
             return View();
         }
-
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> ChangeEmail(string email)
@@ -124,13 +123,13 @@ namespace MovieShopMVC.Controllers
             return RedirectToAction("Login");
         }
 
+        // TODO: change password
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> ChangePassword()
         {
             return View();
         }
-
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> ChangePassword(string password)

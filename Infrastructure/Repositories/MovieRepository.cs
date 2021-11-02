@@ -21,19 +21,16 @@ namespace Infrastructure.Repositories
             return movies;
         }
 
-        public async Task<IEnumerable<Review>> GetAllReviewsForMovie(int id, int pageSize = 30, int page = 1)
-        {
-            throw new NotImplementedException();
-        }
-
         public new async Task<Movie> GetById(int id)
         {
             var movie = await _dbContext.Movies
                 .Include(m => m.Casts).ThenInclude(m => m.Cast)
                 .Include(m => m.Genres).ThenInclude(m => m.Genre)
                 .Include(m => m.Trailers)
+                .Include(m => m.Reviews).ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null) throw new Exception("Movie Not found");
+            if (movie == null) return null;
+                // throw new Exception("Movie Not found");
 
             var movieRating = await _dbContext.Reviews.Where(r => r.MovieId == id).DefaultIfEmpty()
                 .AverageAsync(r => r == null ? 0 : r.Rating);
@@ -47,6 +44,5 @@ namespace Infrastructure.Repositories
             var genres = await _dbContext.Genres.Select(g => g.Name).Distinct().ToListAsync();
             return genres;
         }
-
     }
 }

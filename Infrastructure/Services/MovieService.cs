@@ -19,6 +19,8 @@ namespace Infrastructure.Services
         public async Task<List<MovieCardResponseModel>> GetTop30RevenueMovies()
         {
             var movies = await _movieRepository.GetTop30RevenueMovies();
+            if (movies == null) return null;
+            
             var movieCards = new List<MovieCardResponseModel>();
             foreach (var movie in movies)
             {
@@ -33,10 +35,10 @@ namespace Infrastructure.Services
         public async Task<MovieDetailsResponseModel> GetMovieDetails(int id)
         {
             var movie = await _movieRepository.GetById(id);
-            if (movie == null)
-            {
-                throw new Exception($"No movie found for this {id}");
-            }
+            if (movie == null) return null;
+            // {
+            //     throw new Exception($"No movie found for this {id}");
+            // }
 
             var movieDetails = new MovieDetailsResponseModel
             {
@@ -74,6 +76,17 @@ namespace Infrastructure.Services
                 });
             }
 
+            foreach (var review in movie.Reviews)
+            {
+                movieDetails.Reviews.Add(new MovieReviewResponseModel
+                {
+                    UserId = review.UserId,
+                    FirstName = review.User.FirstName,
+                    LastName = review.User.LastName,
+                    Rating = review.Rating,
+                    ReviewText = review.ReviewText
+                });
+            }
             return movieDetails;
         }
 

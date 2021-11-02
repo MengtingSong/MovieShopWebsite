@@ -21,20 +21,5 @@ namespace Infrastructure.Repositories
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user;
         }
-
-        public async Task<IEnumerable<Review>> GetReviewsByUser(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Favorite> AddFavorite(Favorite favorite)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Favorite> RemoveFavorite(Favorite favorite)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

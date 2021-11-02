@@ -14,10 +14,9 @@ namespace Infrastructure.Repositories
         {
         }
         
-        // TODO: how to use pageSize and pageIndex?
         public async Task<IEnumerable<Purchase>> GetAllPurchases(int pageSize = 30, int pageIndex = 1)
         {
-            var purchases = await _dbContext.Purchases.Take(pageSize * 60).ToListAsync();
+            var purchases = await _dbContext.Purchases.ToListAsync();
             return purchases;
         }
 
@@ -31,7 +30,7 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<Purchase>> GetAllPurchasesByMovie(int movieId, int pageSize = 30, int pageIndex = 1)
         {
             var purchases = await _dbContext.Purchases
-                .Where(p => p.MovieId == movieId).Take(pageSize * 60).ToListAsync();
+                .Where(p => p.MovieId == movieId).ToListAsync();
             return purchases;
         }
 

@@ -6,13 +6,13 @@ namespace ApplicationCore.Models
     {
         public ReviewResponseModel()
         {
-            Reviews = new List<MovieReviewResponseModel>();
+            Reviews = new List<UserReviewResponseModel>();
         }
         public int TotalReviewsCount { get; set; }
-        public List<MovieReviewResponseModel> Reviews { get; set; }
+        public List<UserReviewResponseModel> Reviews { get; set; }
     }
 
-    public class MovieReviewResponseModel : MovieCardResponseModel
+    public class UserReviewResponseModel : MovieCardResponseModel
     {
         public string ReviewText { get; set; }
         public decimal Rating { get; set; }

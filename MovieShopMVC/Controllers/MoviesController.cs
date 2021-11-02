@@ -13,6 +13,7 @@ namespace MovieShopMVC.Controllers
             _movieService = movieService;
         }
         
+        // TODO: Add icons to movie details page
         // https://localhost/movies/details/id
         [HttpGet]
         public async Task<IActionResult> Details(int id)
