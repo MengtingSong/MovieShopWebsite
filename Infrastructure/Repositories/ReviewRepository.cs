@@ -20,12 +20,5 @@ namespace Infrastructure.Repositories
                 .Where(r => r.UserId == userId).Include(r => r.Movie).ToListAsync();
             return reviews;
         }
-        
-        public async Task<IEnumerable<Review>> GetAllReviewsForMovie(int movieId, int pageSize = 30, int page = 1)
-        {
-            var reviews = await _dbContext.Reviews
-                .Where(r => r.MovieId == movieId).Include(r => r.User).ToListAsync();
-            return reviews;
-        }
     }
 }

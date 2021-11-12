@@ -12,7 +12,6 @@ namespace MovieShopMVC.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-
         private readonly ICurrentUserService _currentUserService;
         // private int userId;
 
@@ -23,14 +22,6 @@ namespace MovieShopMVC.Controllers
             // userId = _currentUserService.UserId;
         }
 
-        // TODO: Add purchase get method - details page
-        [HttpGet]
-        [Authorize]
-        public IActionResult Purchase()
-        {
-            return View();
-        }
-        
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Purchase(int movieId)
@@ -41,12 +32,12 @@ namespace MovieShopMVC.Controllers
                 MovieId = movieId
             };
             var isPurchased = await _userService.IsMoviePurchased(requestModel, userId);
-            // TODO: show messages telling user movie already purchased
+            // TODO: hide purchase button if already purchased
             if (isPurchased) return View("../Views/Movies/Details");
             var isSuccessPurchase = await _userService.PurchaseMovie(requestModel, userId);
             if (isSuccessPurchase)
             {
-                // TODO: show messages telling user whether the movie successfully purchased
+                // TODO: show modal with messages telling user whether the movie is successfully purchased
                 return RedirectToAction("Purchases");
             }
 

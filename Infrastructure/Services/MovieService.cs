@@ -16,6 +16,39 @@ namespace Infrastructure.Services
         {
             _movieRepository = movieRepository;
         }
+
+        public async Task<List<MovieCardResponseModel>> GetAllMovies()
+        {
+            var movies = await _movieRepository.GetAll();
+            if (movies == null) return null;
+            
+            var movieCards = new List<MovieCardResponseModel>();
+            foreach (var movie in movies)
+            {
+                movieCards.Add(new MovieCardResponseModel
+                {
+                    Id = movie.Id, Title = movie.Title, PosterUrl = movie.PosterUrl
+                });
+            }
+            return movieCards;
+        }
+
+        public async Task<List<MovieCardResponseModel>> GetTop30RatedMovies()
+        {
+            var movies = await _movieRepository.GetTop30RatedMovies();
+            if (movies == null) return null;
+            
+            var movieCards = new List<MovieCardResponseModel>();
+            foreach (var movie in movies)
+            {
+                movieCards.Add(new MovieCardResponseModel
+                {
+                    Id = movie.Id, Title = movie.Title, PosterUrl = movie.PosterUrl
+                });
+            }
+            return movieCards;
+        }
+
         public async Task<List<MovieCardResponseModel>> GetTop30RevenueMovies()
         {
             var movies = await _movieRepository.GetTop30RevenueMovies();
@@ -90,10 +123,78 @@ namespace Infrastructure.Services
             return movieDetails;
         }
 
-        public async Task<IEnumerable<string>> GetGenres()
+        public async Task<List<MovieReviewResponseModel>> GetMovieReviews(int id)
         {
-            var genres = await _movieRepository.GetGenres();
-            return genres;
+            var reviews = await _movieRepository.GetMovieReviews(id);
+            if (reviews == null) return null;
+            var reviewList = new List<MovieReviewResponseModel>();
+            foreach (var review in reviews)
+            {
+                reviewList.Add(new MovieReviewResponseModel
+                {
+                    FirstName = review.User.FirstName,
+                    LastName = review.User.LastName,
+                    Rating = review.Rating,
+                    ReviewText = review.ReviewText,
+                    UserId = review.UserId
+                });
+            }
+
+            return reviewList;
+        }
+
+        public async Task<IEnumerable<CastResponseModel>> GetMovieCast(int id)
+        {
+            var movieCast = await _movieRepository.GetMovieCast(id);
+            if (movieCast == null) return null;
+            var castList = new List<CastResponseModel>();
+            foreach (var cast in movieCast)
+            {
+                castList.Add(new CastResponseModel
+                {
+                    Id = cast.CastId,
+                    Name = cast.Cast.Name,
+                    Gender = cast.Cast.Gender,
+                    Character = cast.Character,
+                    ProfilePath = cast.Cast.ProfilePath,
+                    TmdbUrl = cast.Cast.TmdbUrl
+                });
+            }
+
+            return castList;
+        }
+
+        public async Task<IEnumerable<GenreResponseModel>> GetMovieGenres(int id)
+        {
+            var genres = await _movieRepository.GetMovieGenres(id);
+            if (genres == null) return null;
+            var genreList = new List<GenreResponseModel>();
+            foreach (var genre in genres)
+            {
+                genreList.Add(new GenreResponseModel
+                {
+                    Id = genre.GenreId,
+                    Name = genre.Genre.Name
+                });
+            }
+
+            return genreList;
+        }
+
+        public async Task<IEnumerable<GenreResponseModel>> GetAllGenres()
+        {
+            var genres = await _movieRepository.GetAllGenres();
+            if (genres == null) return null;
+            var genreList = new List<GenreResponseModel>();
+            foreach (var genre in genres)
+            {
+                genreList.Add(new GenreResponseModel
+                {
+                    Id = genre.Id,
+                    Name = genre.Name
+                });
+            }
+            return genreList;
         }
     }
 }

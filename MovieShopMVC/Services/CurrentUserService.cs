@@ -17,7 +17,7 @@ namespace MovieShopMVC.Services
         }
         // we need to use HttpContext class to get all this information from HttpContext User Object
 
-        public int UserId => Convert.ToInt32((_httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value));
+        public int UserId => Convert.ToInt32((_httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
 
         public bool IsAuthenticated => _httpContextAccessor.HttpContext != null &&
                                        _httpContextAccessor.HttpContext?.User.Identity != null &&

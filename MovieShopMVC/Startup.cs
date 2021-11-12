@@ -41,12 +41,12 @@ namespace MovieShopMVC
             services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
-
+            services.AddHttpContextAccessor();
+            
             // inject connection string from appsetting.json to MovieShopDbContext
             services.AddDbContext<MovieShopDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("MovieShopDbConnection")));
-            
-            services.AddHttpContextAccessor();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -70,11 +70,13 @@ namespace MovieShopMVC
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
